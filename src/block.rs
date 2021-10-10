@@ -3,7 +3,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use crypto_hash::digest;
 use num::{BigInt, BigUint};
 
-const TARGET_BITS: i32 = 24;
+const TARGET_BITS: i32 = 8;
 
 pub struct Block {
     pub timestamp: u64,
