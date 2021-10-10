@@ -2,9 +2,11 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use crypto_hash::digest;
 use num::{BigInt, BigUint};
+use serde::{Deserialize, Serialize};
 
 const TARGET_BITS: i32 = 8;
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Block {
     pub timestamp: u64,
     pub data: Vec<u8>,
@@ -68,7 +70,6 @@ impl<'a> ProofOfWork<'a> {
     }
 
     pub fn run(&self) -> (i64, Vec<u8>) {
-        let mut hash_int: BigInt;
         let mut hash: Vec<u8> = vec![];
         let mut nonce = 0;
 
@@ -81,7 +82,7 @@ impl<'a> ProofOfWork<'a> {
             let data = self.prepare_data(nonce);
             hash = digest(crypto_hash::Algorithm::SHA256, &data);
             print!("\r{}", hex::encode(&hash));
-            hash_int = BigUint::from_bytes_be(&hash).into();
+            let hash_int: BigInt = BigUint::from_bytes_be(&hash).into();
 
             if hash_int < self.target {
                 break;
@@ -92,5 +93,13 @@ impl<'a> ProofOfWork<'a> {
         println!("\n");
 
         (nonce, hash)
+    }
+
+    pub fn validate(&self) -> bool {
+        let data = self.prepare_data(self.block.nonce);
+        let hash = digest(crypto_hash::Algorithm::SHA256, &data);
+        let hash_int: BigInt = BigUint::from_bytes_be(&hash).into();
+
+        return hash_int < self.target;
     }
 }
