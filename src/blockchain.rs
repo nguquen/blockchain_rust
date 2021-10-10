@@ -11,7 +11,6 @@ impl Blockchain {
         self.blocks.push(new_block);
     }
 
-    //TODO: config vim highlight group here
     pub fn new() -> Self {
         Blockchain {
             blocks: vec![Block::new_genesis_block()],
