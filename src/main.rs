@@ -1,7 +1,6 @@
-use blockchain_rust::{blockchain::Blockchain, cli::Cli};
+use blockchain_rust::cli::Cli;
 
 fn main() {
-    let bc = Blockchain::new();
-    let cli = Cli { bc: &bc };
+    let cli = Cli {};
     cli.run();
 }
