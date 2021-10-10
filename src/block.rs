@@ -20,14 +20,14 @@ impl Block {
         self.hash = hash;
     }
 
-    pub fn new(data: &str, prev_block_hash: Vec<u8>) -> Self {
+    pub fn new(data: &str, prev_block_hash: &[u8]) -> Self {
         let mut block = Block {
             timestamp: SystemTime::now()
                 .duration_since(UNIX_EPOCH)
                 .unwrap()
                 .as_secs(),
             data: data.as_bytes().to_vec(),
-            prev_block_hash,
+            prev_block_hash: prev_block_hash.to_owned(),
             hash: vec![],
         };
 
@@ -37,6 +37,6 @@ impl Block {
     }
 
     pub fn new_genesis_block() -> Block {
-        Self::new("Genesis Block", vec![])
+        Self::new("Genesis Block", &[])
     }
 }
